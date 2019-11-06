@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -12,11 +13,15 @@ public enum LightColor
 
 public class TrafficLight : MonoBehaviour, IPointerClickHandler
 {
+    public static event Action<int, LightColor> OnLightChange;
+
     public LightColor currentLight;
     public Material mat;
     public MeshRenderer mesh;
 
     public LightColor prevLight;
+
+    public int id;
 
     Coroutine cor;
 
@@ -45,12 +50,12 @@ public class TrafficLight : MonoBehaviour, IPointerClickHandler
         ChangeColor();
     }
 
-   public void ChangeColor()
+    public void ChangeColor()
     {
-        cor = StartCoroutine(ChangeCo());
+        cor = StartCoroutine(ChangeCo(() => { OnLightChange(id, currentLight); }));
     }
 
-    IEnumerator ChangeCo()
+    IEnumerator ChangeCo(Action callback)
     {
         prevLight = currentLight;
 
@@ -74,6 +79,7 @@ public class TrafficLight : MonoBehaviour, IPointerClickHandler
         Debug.Log($"curr light:{currentLight}");
 
         cor = null;
+        callback();
     }
 
 }

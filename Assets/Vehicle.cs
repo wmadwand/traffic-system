@@ -13,6 +13,20 @@ public class Vehicle : MonoBehaviour
     private float _isPlayerInRangeAngle;
 
     bool isStopedOnTrafficLight;
+    int currentTrafficLightID;
+
+    private void Awake()
+    {
+        TrafficLight.OnLightChange += TrafficLight_OnLightChange;
+    }
+
+    private void TrafficLight_OnLightChange(int arg1, LightColor arg2)
+    {
+        if (currentTrafficLightID == arg1 && arg2==LightColor.green)
+        {
+            isStopedOnTrafficLight = false;
+        }
+    }
 
     private void Start()
     {
@@ -44,6 +58,7 @@ public class Vehicle : MonoBehaviour
                 if (!other.GetComponent<TrafficLight>().IsGreenLight())
                 {
                     isStopedOnTrafficLight = true;
+                    currentTrafficLightID = other.GetComponent<TrafficLight>().id;
                 }
                 else
                 {

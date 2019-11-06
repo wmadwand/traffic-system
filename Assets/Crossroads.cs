@@ -100,16 +100,11 @@ public class Crossroads : MonoBehaviour/*, IPointerDownHandler, IPointerUpHandle
     {
         var trafficLight = trafficLightsVertical[0];
 
-
         var tlNormal = /*(Vector2) */trafficLight.gameObject.transform.forward.normalized;
         var trafficLightDir = new Vector2(tlNormal.x, tlNormal.z);
 
         Debug.Log($"resVeccc:{trafficLightDir}");        
         Debug.Log($"dirNOrm:{dirNOrm}");
-
-        //var ccc = resVeccc - dirNOrm;
-        //var vecRes = resVeccc - dirNOrm;
-        //Debug.Log($"vecRes:{vecRes}");
 
         var dot = Vector3.Dot(trafficLightDir, dirNOrm);
 
@@ -123,7 +118,6 @@ public class Crossroads : MonoBehaviour/*, IPointerDownHandler, IPointerUpHandle
 
     public void CallTrafficLights(DraggedDirection direction)
     {
-
         if (direction == DraggedDirection.Left || direction == DraggedDirection.Right)
         {
             foreach (var item in trafficLightsHorizontal)
@@ -138,27 +132,5 @@ public class Crossroads : MonoBehaviour/*, IPointerDownHandler, IPointerUpHandle
                 item.ChangeColor();
             }
         }
-        
-        //var trafficLight = trafficLightsVertical[0];
-
-
-        //var tlNormal = /*(Vector2) */trafficLight.gameObject.transform.forward.normalized;
-        //var trafficLightDir = new Vector2(tlNormal.x, tlNormal.z);
-
-        //Debug.Log($"resVeccc:{trafficLightDir}");
-        //Debug.Log($"dirNOrm:{dirNOrm}");
-
-        ////var ccc = resVeccc - dirNOrm;
-        ////var vecRes = resVeccc - dirNOrm;
-        ////Debug.Log($"vecRes:{vecRes}");
-
-        //var dot = Vector3.Dot(trafficLightDir, dirNOrm);
-
-        //Debug.Log($"dot:{dot}");
-
-        //if (dot > dotVal)
-        //{
-        //    trafficLight.ChangeColor();
-        //}
     }
 }
