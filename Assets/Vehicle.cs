@@ -9,8 +9,8 @@ public class Vehicle : MonoBehaviour
     [SerializeField] private float _fieldView = .95f;
 
     private Transform _player;
-    private Vector3 rotationDir;
-    private float _isPlayerInRangeAngle;
+    private Vector3 vectorDir;
+    private float vectorDot;
 
     bool isStopedOnTrafficLight;
     int currentTrafficLightID;
@@ -53,7 +53,7 @@ public class Vehicle : MonoBehaviour
     {
         if (other.GetComponent<TrafficLight>())
         {
-            if (IsFaceToObject(other.transform.position))
+            if (IsFaceToObject(other.transform.forward))
             {
                 if (!other.GetComponent<TrafficLight>().IsGreenLight())
                 {
@@ -70,9 +70,9 @@ public class Vehicle : MonoBehaviour
 
     public bool IsFaceToObject(Vector3 target)
     {
-        rotationDir = target - transform.position;
-        _isPlayerInRangeAngle = Vector3.Dot(transform.forward.normalized, rotationDir.normalized);
+        //vectorDir = target - transform.position;
+        vectorDot = Vector3.Dot(transform.forward.normalized, target.normalized);
 
-        return _isPlayerInRangeAngle > _fieldView;
+        return vectorDot < _fieldView;
     }
 }
