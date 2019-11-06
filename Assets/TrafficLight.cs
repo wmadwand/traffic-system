@@ -20,6 +20,11 @@ public class TrafficLight : MonoBehaviour, IPointerClickHandler
 
     Coroutine cor;
 
+    public bool IsGreenLight()
+    {
+        return currentLight == LightColor.green;
+    }
+
     private void Awake()
     {
         currentLight = LightColor.red;
