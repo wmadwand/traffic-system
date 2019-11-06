@@ -86,7 +86,7 @@ public class Vehicle : MonoBehaviour
             }
         }
 
-        if (other.GetComponent<Router>() && !isStopedOnTrafficLight && cor == null && !gotTurn)
+        if (other.GetComponent<Router>() && !isStopedOnTrafficLight && cor == null /*&& !gotTurn*/)
         {
             var directions = other.GetComponent<Router>().possibleDirections;
 
@@ -100,13 +100,13 @@ public class Vehicle : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.GetComponent<Router>())
-        {
-            //StopCoroutine(cor);
+        //if (other.GetComponent<Router>())
+        //{
+        //    //StopCoroutine(cor);
             
-            gotTurn = false;
+        //    gotTurn = false;
 
-        }
+        //}
     }
 
     public bool IsFaceToObject(Vector3 target)
