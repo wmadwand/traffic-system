@@ -20,6 +20,8 @@ public class Vehicle : MonoBehaviour
     Rigidbody m_Rigidbody;
     Vector3 m_EulerAngleVelocity;
 
+    Coroutine cor;
+
     private void Awake()
     {
         TrafficLight.OnLightChange += TrafficLight_OnLightChange;
@@ -54,13 +56,16 @@ public class Vehicle : MonoBehaviour
     IEnumerator TurnObj(Vector3 vecAngle)
     {
         var quatTarget = Quaternion.Euler(vecAngle);
-        
-        while (Quaternion.Angle(m_Rigidbody.rotation, quatTarget) > 0.01f)
+
+        while (Quaternion.Angle(m_Rigidbody.rotation, quatTarget) > 0.1f /*0.01f*/)
         {
             TurnObject(vecAngle);
 
             yield return new WaitForFixedUpdate();
+
         }
+
+        cor = null;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -81,13 +86,26 @@ public class Vehicle : MonoBehaviour
             }
         }
 
-        if (other.GetComponent<Router>() && !isStopedOnTrafficLight)
+        if (other.GetComponent<Router>() && !isStopedOnTrafficLight && cor == null && !gotTurn)
         {
             var directions = other.GetComponent<Router>().possibleDirections;
 
             var randdomIndex = Random.Range(0, directions.Length);
 
+            gotTurn = true;
+
             Turn(directions[randdomIndex]);
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.GetComponent<Router>())
+        {
+            //StopCoroutine(cor);
+            
+            gotTurn = false;
+
         }
     }
 
@@ -98,6 +116,8 @@ public class Vehicle : MonoBehaviour
 
         return vectorDot < _fieldView;
     }
+
+    bool gotTurn;
 
     void TurnObject(Vector3 vecAngle)
     {
@@ -110,15 +130,16 @@ public class Vehicle : MonoBehaviour
         switch (dir)
         {
             case DraggedDirection.Up:
+                cor = StartCoroutine(TurnObj(new Vector3(0, 0, 0)));
                 break;
             case DraggedDirection.Down:
                 break;
             case DraggedDirection.Right:
-                StartCoroutine(TurnObj(new Vector3(0, 90, 0)));
+                cor = StartCoroutine(TurnObj(new Vector3(0, 90, 0)));
 
                 break;
             case DraggedDirection.Left:
-                StartCoroutine(TurnObj(new Vector3(0, -90, 0)));
+                cor = StartCoroutine(TurnObj(new Vector3(0, -90, 0)));
                 break;
             default:
                 break;
