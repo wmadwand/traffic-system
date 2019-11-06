@@ -8,6 +8,8 @@ public class Vehicle : MonoBehaviour
     public float speed;
     [SerializeField] private float _fieldView = .95f;
 
+    public float rotationRate;
+
     private Transform _player;
     private Vector3 vectorDir;
     private float vectorDot;
@@ -15,38 +17,50 @@ public class Vehicle : MonoBehaviour
     bool isStopedOnTrafficLight;
     int currentTrafficLightID;
 
+    Rigidbody m_Rigidbody;
+    Vector3 m_EulerAngleVelocity;
+
     private void Awake()
     {
         TrafficLight.OnLightChange += TrafficLight_OnLightChange;
+
+        m_EulerAngleVelocity = new Vector3(0, 100, 0);
+
+        m_Rigidbody = GetComponent<Rigidbody>();
     }
 
     private void TrafficLight_OnLightChange(int arg1, LightColor arg2)
     {
-        if (currentTrafficLightID == arg1 && arg2==LightColor.green)
+        if (currentTrafficLightID == arg1 && arg2 == LightColor.green)
         {
             isStopedOnTrafficLight = false;
         }
     }
 
-    private void Start()
-    {
-        //GetComponent<Rigidbody>().velocity = transform.forward * 5;
-    }
+    bool isTurning;
 
     private void FixedUpdate()
     {
         if (isStopedOnTrafficLight)
         {
-            GetComponent<Rigidbody>().velocity = Vector3.zero;
+            GetComponent<Rigidbody>().velocity = Vector3.Lerp(GetComponent<Rigidbody>().velocity, Vector3.zero, 10 * Time.fixedDeltaTime);
             return;
         }
-        
+
         GetComponent<Rigidbody>().velocity = transform.forward * speed * Time.fixedDeltaTime;
+
     }
 
-    private void Update()
+    IEnumerator TurnObj(Vector3 vecAngle)
     {
+        var quatTarget = Quaternion.Euler(vecAngle);
+        
+        while (Quaternion.Angle(m_Rigidbody.rotation, quatTarget) > 0.01f)
+        {
+            TurnObject(vecAngle);
 
+            yield return new WaitForFixedUpdate();
+        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -66,6 +80,15 @@ public class Vehicle : MonoBehaviour
                 }
             }
         }
+
+        if (other.GetComponent<Router>() && !isStopedOnTrafficLight)
+        {
+            var directions = other.GetComponent<Router>().possibleDirections;
+
+            var randdomIndex = Random.Range(0, directions.Length);
+
+            Turn(directions[randdomIndex]);
+        }
     }
 
     public bool IsFaceToObject(Vector3 target)
@@ -74,5 +97,31 @@ public class Vehicle : MonoBehaviour
         vectorDot = Vector3.Dot(transform.forward.normalized, target.normalized);
 
         return vectorDot < _fieldView;
+    }
+
+    void TurnObject(Vector3 vecAngle)
+    {
+        Quaternion deltaRotation = Quaternion.Euler(vecAngle * rotationRate * Time.deltaTime);
+        m_Rigidbody.MoveRotation(m_Rigidbody.rotation * deltaRotation);
+    }
+
+    void Turn(DraggedDirection dir)
+    {
+        switch (dir)
+        {
+            case DraggedDirection.Up:
+                break;
+            case DraggedDirection.Down:
+                break;
+            case DraggedDirection.Right:
+                StartCoroutine(TurnObj(new Vector3(0, 90, 0)));
+
+                break;
+            case DraggedDirection.Left:
+                StartCoroutine(TurnObj(new Vector3(0, -90, 0)));
+                break;
+            default:
+                break;
+        }
     }
 }
