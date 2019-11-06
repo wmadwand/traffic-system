@@ -46,6 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentLight: 0
+  mat: {fileID: 0}
   mesh: {fileID: 1428623345142839231}
   prevLight: 0
 --- !u!65 &8160750472638417838
@@ -127,7 +128,7 @@ PrefabInstance:
     - target: {fileID: -4216859302048453862, guid: fbb44cf922b684841a97e22c7605a152,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: fbb44cf922b684841a97e22c7605a152,
         type: 3}
@@ -137,7 +138,7 @@ PrefabInstance:
     - target: {fileID: -4216859302048453862, guid: fbb44cf922b684841a97e22c7605a152,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: fbb44cf922b684841a97e22c7605a152,
         type: 3}
@@ -152,7 +153,7 @@ PrefabInstance:
     - target: {fileID: -4216859302048453862, guid: fbb44cf922b684841a97e22c7605a152,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 180
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: fbb44cf922b684841a97e22c7605a152,
         type: 3}

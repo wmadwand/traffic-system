@@ -39,7 +39,7 @@ public class TrafficLight : MonoBehaviour, IPointerClickHandler
         ChangeColor();
     }
 
-    void ChangeColor()
+   public void ChangeColor()
     {
         cor = StartCoroutine(ChangeCo());
     }
