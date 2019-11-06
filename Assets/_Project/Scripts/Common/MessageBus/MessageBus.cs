@@ -15,7 +15,7 @@ namespace Bluehorse.Game.Messages
         public static readonly Message OnStepFinished = new Message();
         public static readonly Message<bool> OnSpeechActive = new Message<bool>();
         
-        public static readonly Message<LessonStep> OnStepRun = new Message<LessonStep>();
+
 
         public static readonly Message<string, float, object> SampleMessage03 = new Message<string, float, object>();
 
