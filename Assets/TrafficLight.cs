@@ -25,6 +25,7 @@ public class TrafficLight : MonoBehaviour, IPointerClickHandler
         currentLight = LightColor.red;
 
         mat = mesh.materials[2];
+        mat.color = Color.red;
     }
 
     public void OnPointerClick(PointerEventData eventData)
